@@ -4,8 +4,7 @@ export class SOQuestionSet extends Component {
     constructor(props) {
         super(props);
         this.state = { questions: [], loading: true };        
-        let hourAgo = parseInt((Date.now() / 1000) - (24*360));
-        //let SOApiUrl = "https://api.stackexchange.com/2.2/questions?fromdate=" + hourAgo + "&order=desc&sort=activity&site=stackoverflow";
+        let hourAgo = parseInt((Date.now() / 1000) - (24*360));       
         let SOApiUrl = "https://api.stackexchange.com/2.2/search/advanced?fromdate=" + hourAgo + "&order=desc&sort=activity&accepted=True&site=stackoverflow";
         fetch(SOApiUrl)
             .then(response => response.json())
@@ -27,6 +26,7 @@ export class SOQuestionSet extends Component {
             <table className='table'>
                 <thead>
                     <tr>
+                        <th></th>
                         <th>Votes</th>
                         <th>Answers</th>
                         <th>Views</th>
@@ -34,13 +34,14 @@ export class SOQuestionSet extends Component {
                     </tr>
                 </thead>
                 <tbody>
-                    {qs.map(q =>
-                        <tr key={q.score}>
+                    {qs.map(q =>                        
+                        <tr key={q.score}>                            
+                            <td><a href={'q/' + q.question_id} class="btn btn-primary btn-lg active" role="button" aria-pressed="true">View</a></td>
                             <td>{q.score}</td>
                             <td>{q.answer_count}</td>
                             <td>{q.view_count}</td>
-                            <td>{q.title}</td>
-                        </tr>
+                            <td>{q.title}</td>                            
+                        </tr>                        
                     )}
                 </tbody>
             </table>
@@ -57,8 +58,8 @@ export class SOQuestionSet extends Component {
 
         return (
             <div>
-                <h1>Weather forecast</h1>
-                <p>This component demonstrates fetching data from the server.</p>
+                <h1>Recent Questions</h1>
+                <p>Click on a question to view its answers.</p>
                 {contents}
             </div>
         );
