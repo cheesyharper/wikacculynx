@@ -22,15 +22,10 @@ export class NavMenu extends Component {
               <NavItem>
                 <Glyphicon glyph='home' /> Home
               </NavItem>
-            </LinkContainer>
-            <LinkContainer to={'/counter'}>
-              <NavItem>
-                <Glyphicon glyph='education' /> Counter
-              </NavItem>
-            </LinkContainer>
+            </LinkContainer>            
             <LinkContainer to={'/soq'}>
               <NavItem>
-                <Glyphicon glyph='th-list' /> Fetch data
+                <Glyphicon glyph='th-list' /> Questions
               </NavItem>
             </LinkContainer>
           </Nav>
