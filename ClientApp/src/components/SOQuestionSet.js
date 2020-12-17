@@ -4,7 +4,7 @@ export class SOQuestionSet extends Component {
     constructor(props) {
         super(props);
         this.state = { questions: [], loading: true };        
-        let hourAgo = parseInt((Date.now() / 1000) - (24*360));       
+        let hourAgo = parseInt((Date.now() / 1000) - (48*360));       
         let SOApiUrl = "https://api.stackexchange.com/2.2/search/advanced?fromdate=" + hourAgo + "&order=desc&sort=activity&accepted=True&site=stackoverflow";
         fetch(SOApiUrl)
             .then(response => response.json())

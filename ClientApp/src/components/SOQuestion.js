@@ -23,13 +23,30 @@ export class SOQuestion extends Component {
 
     
 
+
     static renderAnswers(answers, question) {        
-        function rightAnswer() {
-            
+        function rightAnswer() {            
+            document.getElementById("rightAnswer").style.backgroundColor = 'rgb(100, 240, 125)';
+            let infobox = document.getElementById("rightAnswerInfo");
+            infobox.innerHTML = "<h3>Correct!</h3>";
+            clearAllButtons();
         }
 
-        function wrongAnswer() {
+        function wrongAnswer(id) {
+            let trId = 'answer' + id;
+            let info = trId + 'Info';
+            document.getElementById(trId).style.backgroundColor = 'rgb(255, 100, 80)';
+            let infobox = document.getElementById(info);            
+            infobox.innerHTML = "<h3>Wrong!</h3>"
+            document.getElementById("rightAnswer").style.backgroundColor = 'rgb(100, 240, 125)';
+            clearAllButtons();
+        }
 
+        function clearAllButtons() {
+            let buttons = document.getElementsByClassName("btn-lg");
+            for (let i = buttons.length -1; i >= 0 ; --i) {
+                buttons[i].remove();
+            }            
         }
 
         return (            
@@ -46,21 +63,23 @@ export class SOQuestion extends Component {
                             </tr>
                         </tbody>                    
                 </table>
-            
+                
                 <div><h2>Answers:</h2></div>
                 <table className='table'>                
                     <tbody>
                         {answers.map(a => {
                             if (a.is_accepted)
-                                return (<tr key={a.answer_id}>
+                                return (<tr id="rightAnswer" key={a.answer_id}>
+                                    <td><div id="rightAnswerInfo"></div></td>
                                     <td><a onClick={rightAnswer} class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Guess this one</a></td>
                                     <td><div dangerouslySetInnerHTML={{ __html: a.body }}></div></td>
                                 </tr>)
 
 
                             return (
-                            <tr key={a.answer_id}>
-                                <td><a onClick={wrongAnswer} class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Don't guess this one</a></td>
+                                <tr id={'answer' + a.answer_id} key={a.answer_id}>
+                                    <td><div id={'answer' + a.answer_id  + 'Info'}></div></td>
+                                <td><a onClick={wrongAnswer.bind(this,a.answer_id)} class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Guess this one</a></td>
                                 <td><div dangerouslySetInnerHTML={{ __html: a.body }}></div></td>
                             </tr>)
                         }
