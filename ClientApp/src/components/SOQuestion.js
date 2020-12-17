@@ -3,7 +3,10 @@
 export class SOQuestion extends Component {
     constructor(props) {
         super(props);
-        this.state = { question: '', answers: [], loading: true };        
+        this.state = { question: '', answers: [], loading: true };      
+
+        // grab answer data from the api
+        // the filter on the end gives us the is_accepted flag
         let SOQUrl = "https://api.stackexchange.com/2.2/questions/" + props.match.params.qid + "/answers?order=desc&sort=activity&site=stackoverflow&filter=!--1nZx2SAHs1";        
         fetch(SOQUrl)
             .then(response => response.json())
@@ -11,6 +14,10 @@ export class SOQuestion extends Component {
                 this.setState({ question: '', answers: data.items, loading: true });
             });
 
+        // grab question data from the api.
+        // that filter on the end limits the data we recieve to just the title and body of the question
+        // annoyingly, the SO Api allows you to get some information about the question an answer belongs to from the /questions/{ids}/answers endpoint 
+        //...but not the body! Hence, this second api call to just /questions/{ids}
         let justQuestionUrl = "https://api.stackexchange.com/2.2/questions/" + props.match.params.qid + "?order=desc&sort=activity&site=stackoverflow&filter=!BHMIb2uwE7zo5vlTU9xHLOf3-tY-Ea";
         fetch(justQuestionUrl)
             .then(response => response.json())
@@ -26,6 +33,7 @@ export class SOQuestion extends Component {
 
     static renderAnswers(answers, question) {        
         function rightAnswer() {            
+            // if the user got it right, highlight that answer in green and show them some text that says "Correct!"
             document.getElementById("rightAnswer").style.backgroundColor = 'rgb(100, 240, 125)';
             let infobox = document.getElementById("rightAnswerInfo");
             infobox.innerHTML = "<h3>Correct!</h3>";
@@ -33,6 +41,8 @@ export class SOQuestion extends Component {
         }
 
         function wrongAnswer(id) {
+            // if the user guessed wrong, highlight the answer that they guessed in red. Then, highlight the correct answer in green.
+            // also, give them a nice helpful "Wrong!" to make their day better
             let trId = 'answer' + id;
             let info = trId + 'Info';
             document.getElementById(trId).style.backgroundColor = 'rgb(255, 100, 80)';
@@ -43,6 +53,8 @@ export class SOQuestion extends Component {
         }
 
         function clearAllButtons() {
+            // after the user guesses, get rid of the buttons on the page so they can't try to guess again            
+            // it iterates through the list backwards due to the way that DOM pops the elements off the top of the array (and page)
             let buttons = document.getElementsByClassName("btn-lg");
             for (let i = buttons.length -1; i >= 0 ; --i) {
                 buttons[i].remove();
