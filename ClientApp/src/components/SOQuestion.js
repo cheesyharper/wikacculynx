@@ -10,8 +10,19 @@ export class SOQuestion extends Component {
         let SOQUrl = "https://api.stackexchange.com/2.2/questions/" + props.match.params.qid + "/answers?order=desc&sort=activity&site=stackoverflow&filter=!--1nZx2SAHs1";        
         fetch(SOQUrl)
             .then(response => response.json())
-            .then(data => {                
-                this.setState({ question: '', answers: data.items, loading: true });
+            .then(data => {
+                //randomize the array of answers we got.
+                let array = data.items;
+                for (let i = array.length-1; i > 0; --i) {
+                    const pickItr = Math.floor(Math.random() * i );
+                    const cur = array[i];
+                    console.log(pickItr);
+                    console.log(cur);
+                    array[i] = array[pickItr];                    
+                    array[pickItr] = cur;
+                }
+
+                this.setState({ question: '', answers: array, loading: true });
             });
 
         // grab question data from the api.
@@ -27,6 +38,11 @@ export class SOQuestion extends Component {
 
 
     }  
+
+    
+        
+
+    
 
     
 
